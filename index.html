@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SODIMCO LTDA. | Industria Metalmecánica</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --color-primario: #c41e3a;
+            --color-primario-oscuro: #9e1830;
+            --color-secundario: #1a365d;
+            --color-gris: #2d3748;
+            --color-gris-claro: #718096;
+            --color-fondo: #f7fafc;
+            --color-blanco: #ffffff;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            color: var(--color-gris);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Header */
+        header {
+            background: var(--color-blanco);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1rem 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .logo {
+            height: 88px;
+            width: auto;
+            max-height: 20vw;
+            object-fit: contain;
+        }
+
+        .logo-placeholder {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--color-primario);
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: var(--color-gris);
+            font-weight: 600;
+            transition: color 0.2s;
+        }
+
+        nav a:hover {
+            color: var(--color-primario);
+        }
+
+        /* Banner / Hero */
+        .banner {
+            position: relative;
+            min-height: 55vh;
+            min-height: 520px;
+            background: linear-gradient(135deg, var(--color-secundario) 0%, var(--color-gris) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--color-blanco);
+            text-align: center;
+            padding: 3rem 1.5rem;
+        }
+
+        .banner-content {
+            position: relative;
+            z-index: 2;
+            max-width: 640px;
+        }
+
+        .banner h1 {
+            font-size: clamp(1.5rem, 3.5vw, 2.25rem);
+            margin-bottom: 0.5rem;
+            font-weight: 700;
+            text-shadow: 0 2px 12px rgba(0,0,0,0.3);
+        }
+
+        .banner p {
+            font-size: 1rem;
+            opacity: 0.95;
+            text-shadow: 0 1px 8px rgba(0,0,0,0.25);
+        }
+
+        /* Secciones */
+        section {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 4rem 1.5rem;
+        }
+
+        .section-title {
+            font-size: 1.75rem;
+            color: var(--color-secundario);
+            margin-bottom: 2rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 3px solid var(--color-primario);
+            display: inline-block;
+        }
+
+        /* Nosotros */
+        #nosotros {
+            background: var(--color-fondo);
+        }
+
+        #nosotros p {
+            margin-bottom: 1rem;
+            text-align: justify;
+        }
+
+        .mision-vision {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .card {
+            background: var(--color-blanco);
+            padding: 1.75rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 14px rgba(0,0,0,0.06);
+            border-left: 4px solid var(--color-primario);
+        }
+
+        .card h3 {
+            color: var(--color-primario);
+            margin-bottom: 0.75rem;
+            font-size: 1.2rem;
+        }
+
+        /* Productos */
+        #productos {
+            background: var(--color-blanco);
+        }
+
+        .productos-intro {
+            margin-bottom: 2rem;
+            color: var(--color-gris-claro);
+        }
+
+        .productos-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .producto-item {
+            background: var(--color-fondo);
+            padding: 1.5rem;
+            border-radius: 8px;
+            text-align: center;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .producto-item:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+        }
+
+        .producto-item .icono {
+            font-size: 2.5rem;
+            margin-bottom: 0.75rem;
+            color: var(--color-primario);
+        }
+
+        .producto-item h4 {
+            color: var(--color-secundario);
+            font-size: 1rem;
+            margin-bottom: 0.25rem;
+        }
+
+        /* Contacto */
+        #contacto {
+            background: var(--color-fondo);
+        }
+
+        .contacto-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+        }
+
+        .contacto-item {
+            background: var(--color-blanco);
+            padding: 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .contacto-item h3 {
+            color: var(--color-primario);
+            margin-bottom: 0.75rem;
+            font-size: 1.1rem;
+        }
+
+        .contacto-item p,
+        .contacto-item a {
+            color: var(--color-gris);
+            text-decoration: none;
+        }
+
+        .contacto-item a:hover {
+            color: var(--color-primario);
+            text-decoration: underline;
+        }
+
+        .lineas-atencion {
+            margin-top: 2rem;
+        }
+
+        .lineas-atencion h3 {
+            color: var(--color-secundario);
+            margin-bottom: 1rem;
+        }
+
+        .lineas-atencion ul {
+            list-style: none;
+        }
+
+        .lineas-atencion li {
+            padding: 0.35rem 0;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .lineas-atencion li::before {
+            content: "▸";
+            color: var(--color-primario);
+            font-weight: bold;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--color-secundario);
+            color: var(--color-blanco);
+            padding: 2rem 1.5rem;
+            text-align: center;
+        }
+
+        .footer-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        footer p {
+            opacity: 0.9;
+            font-size: 0.95rem;
+        }
+
+        footer a {
+            color: var(--color-blanco);
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+
+        /* ========== Animaciones profesionales ========== */
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-24px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(28px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes bannerImageZoom {
+            0% { transform: scale(1.05); }
+            100% { transform: scale(1.15); }
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        header {
+            transition: box-shadow 0.3s ease, background 0.3s ease;
+        }
+
+        header.scrolled {
+            box-shadow: 0 4px 20px rgba(0,0,0,0.12);
+        }
+
+        .header-inner .logo-wrap {
+            animation: fadeInDown 0.6s ease-out;
+            display: block;
+            text-decoration: none;
+        }
+
+        .logo {
+            transition: transform 0.3s ease;
+        }
+
+        .logo:hover {
+            transform: scale(1.03);
+        }
+
+        nav li {
+            animation: fadeInDown 0.6s ease-out backwards;
+        }
+
+        nav li:nth-child(1) { animation-delay: 0.1s; }
+        nav li:nth-child(2) { animation-delay: 0.15s; }
+        nav li:nth-child(3) { animation-delay: 0.2s; }
+        nav li:nth-child(4) { animation-delay: 0.25s; }
+        nav li:nth-child(5) { animation-delay: 0.3s; }
+
+        nav a {
+            position: relative;
+        }
+
+        nav a::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: -4px;
+            width: 0;
+            height: 2px;
+            background: var(--color-primario);
+            transition: width 0.3s ease;
+        }
+
+        nav a:hover::after {
+            width: 100%;
+        }
+
+        .banner {
+            min-height: 520px;
+            overflow: hidden;
+        }
+
+        .banner-bg {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.85;
+            animation: bannerImageZoom 18s ease-in-out infinite alternate;
+        }
+
+        .banner-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(26,54,93,0.45) 0%, rgba(45,55,72,0.5) 100%);
+            z-index: 1;
+        }
+
+        .reveal {
+            opacity: 0;
+            transform: translateY(36px);
+            transition: opacity 0.7s ease-out, transform 0.7s ease-out;
+        }
+
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .card {
+            transition: transform 0.35s ease, box-shadow 0.35s ease, border-left-color 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 12px 28px rgba(0,0,0,0.1);
+            border-left-color: var(--color-secundario);
+        }
+
+        .producto-item {
+            transition: transform 0.35s ease, box-shadow 0.35s ease;
+        }
+
+        .producto-item:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 28px rgba(0,0,0,0.12);
+        }
+
+        .producto-item .icono {
+            transition: transform 0.35s ease;
+        }
+
+        .producto-item:hover .icono {
+            transform: scale(1.15);
+        }
+
+        .contacto-item {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .contacto-item:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+        }
+
+        footer {
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        @media (max-width: 600px) {
+            nav ul {
+                gap: 1rem;
+            }
+
+            section {
+                padding: 2.5rem 1rem;
+            }
+
+            .banner {
+                min-height: 420px;
+            }
+
+            .logo {
+                height: 72px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-inner">
+            <a href="#inicio" class="logo-wrap">
+                <img src="MELISSA%20FOTOS%20SODIMCO/LOGOS/LOGO%20SODIMCO%20PNG.png" alt="SODIMCO LTDA. Industria Metalmecánica" class="logo">
+            </a>
+            <nav>
+                <ul>
+                    <li><a href="#inicio">Inicio</a></li>
+                    <li><a href="#nosotros">Nosotros</a></li>
+                    <li><a href="repuestos.html">Catálogo repuestos</a></li>
+                    <li><a href="productos.html">Catálogo productos</a></li>
+                    <li><a href="#contacto">Contacto</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <section id="inicio" class="banner">
+            <img src="MELISSA%20FOTOS%20SODIMCO/perfil%20+%20portada/Portada.png" alt="" class="banner-bg" aria-hidden="true">
+            <div class="banner-overlay"></div>
+            <div class="banner-content">
+                <h1>SODIMCO LTDA. Industria Metalmecánica</h1>
+                <p>Legalmente constituida en el país, con experiencia en comercio y servicios para la Industria del Transporte.</p>
+            </div>
+        </section>
+
+        <section id="nosotros" class="reveal">
+            <h2 class="section-title">Nosotros</h2>
+            <p>SODIMCO LTDA. Industria Metalmecánica, legalmente constituida en el país, con experiencia en comercio y servicios para la Industria del Transporte. Contamos con un gran stock de repuestos genuinos para equipos industriales, pesados y sistemas hidráulicos.</p>
+            <p>Fabricamos acoplados (semirremolques, graneleros, tolvas, tanques, furgones, cámaras frigoríficas, lowboys), estructuras metálicas y equipos industriales. Además ofrecemos reparación y mantenimiento de camiones, tractocamiones y semirremolques, con personal especializado en diseño, producción y control de calidad.</p>
+
+            <div class="mision-vision">
+                <div class="card">
+                    <h3>Misión</h3>
+                    <p>Fortalecer el liderazgo en la fabricación de toda clase de equipos a nivel nacional, estableciendo objetivos y metas para la mejora continua del sistema de producción y procesos, la calidad de productos y servicios, la protección del medio ambiente, la tecnificación y seguridad de nuestro personal, para prestar cada vez una mejor atención a nuestros clientes.</p>
+                </div>
+                <div class="card">
+                    <h3>Visión</h3>
+                    <p>Ser la empresa líder del mercado nacional en la fabricación de equipos para el transporte pesado y la industria en general, e incursionar en el mercado internacional con productos de alta calidad y prestigio.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="productos" class="reveal">
+            <h2 class="section-title">Productos y Servicios</h2>
+            <p class="productos-intro">Fabricación, repuestos y servicios para el transporte pesado y la industria.</p>
+            <div class="productos-grid">
+                <div class="producto-item">
+                    <div class="icono">🚛</div>
+                    <h4>Semirremolques</h4>
+                    <p>Graneleros, tolvas, lowboys</p>
+                </div>
+                <div class="producto-item">
+                    <div class="icono">🛢️</div>
+                    <h4>Tanques y cisternas</h4>
+                    <p>Furgones, cámaras frigoríficas</p>
+                </div>
+                <div class="producto-item">
+                    <div class="icono">⚙️</div>
+                    <h4>Estructuras metálicas</h4>
+                    <p>Equipos industriales</p>
+                </div>
+                <div class="producto-item">
+                    <div class="icono">🔧</div>
+                    <h4>Repuestos genuinos</h4>
+                    <p>Equipos pesados e hidráulicos</p>
+                </div>
+                <div class="producto-item">
+                    <div class="icono">🛠️</div>
+                    <h4>Mantenimiento</h4>
+                    <p>Camiones y tractocamiones</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="contacto" class="reveal">
+            <h2 class="section-title">Contacto</h2>
+            <div class="contacto-grid">
+                <div class="contacto-item">
+                    <h3>Casa Matriz</h3>
+                    <p>El Alto - La Paz<br>Av. Juan Pablo II, #3569</p>
+                </div>
+                <div class="contacto-item">
+                    <h3>Sucursal 1</h3>
+                    <p>El Alto - La Paz<br>Zona Rosas Pampa, Av. 6, entre 1 y 2, #50</p>
+                </div>
+                <div class="contacto-item">
+                    <h3>Sucursal 2</h3>
+                    <p>Santa Cruz<br>Av. Doble Vía La Guardia, entre 3 y 4 anillo</p>
+                </div>
+            </div>
+            <div class="lineas-atencion">
+                <h3>Líneas de atención</h3>
+                <ul>
+                    <li><strong>La Paz:</strong> 591-71240200 / 591-2-2845879</li>
+                    <li><strong>Cochabamba:</strong> 71240801</li>
+                    <li><strong>Santa Cruz:</strong> 71240811</li>
+                </ul>
+                <p style="margin-top: 1rem;"><strong>Email:</strong> <a href="mailto:sodimco@sodimco.com.bo">sodimco@sodimco.com.bo</a></p>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="footer-inner">
+            <p><strong>SODIMCO LTDA.</strong> Industria Metalmecánica</p>
+            <p>El Alto - La Paz: Av. Juan Pablo II, #3569</p>
+            <p>Teléfono: 591-71240200 / 591-2-2845879 · <a href="mailto:sodimco@sodimco.com.bo">sodimco@sodimco.com.bo</a></p>
+        </div>
+    </footer>
+
+    <script>
+        (function() {
+            var header = document.querySelector('header');
+            var reveals = document.querySelectorAll('.reveal');
+
+            function onScroll() {
+                if (window.scrollY > 20) {
+                    header.classList.add('scrolled');
+                } else {
+                    header.classList.remove('scrolled');
+                }
+
+                var winH = window.innerHeight;
+                var margin = 80;
+                reveals.forEach(function(el) {
+                    var top = el.getBoundingClientRect().top;
+                    if (top < winH - margin) {
+                        el.classList.add('visible');
+                    }
+                });
+            }
+
+            window.addEventListener('scroll', function() { window.requestAnimationFrame(onScroll); });
+            window.addEventListener('load', onScroll);
+        })();
+    </script>
+</body>
+</html>

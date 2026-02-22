@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Catálogo de repuestos | SODIMCO LTDA.</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --color-primario: #c41e3a;
+            --color-primario-oscuro: #9e1830;
+            --color-secundario: #1a365d;
+            --color-gris: #2d3748;
+            --color-gris-claro: #718096;
+            --color-fondo: #f7fafc;
+            --color-blanco: #ffffff;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            color: var(--color-gris);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        html { scroll-behavior: smooth; }
+
+        header {
+            background: var(--color-blanco);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1rem 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .logo-wrap { display: block; text-decoration: none; }
+        .logo {
+            height: 88px;
+            width: auto;
+            max-height: 20vw;
+            object-fit: contain;
+        }
+
+        nav ul { list-style: none; display: flex; gap: 1.5rem; flex-wrap: wrap; }
+        nav a {
+            text-decoration: none;
+            color: var(--color-gris);
+            font-weight: 600;
+            transition: color 0.2s;
+        }
+        nav a:hover { color: var(--color-primario); }
+        nav a.activo { color: var(--color-primario); }
+
+        .pagina-titulo {
+            background: linear-gradient(135deg, var(--color-secundario) 0%, var(--color-gris) 100%);
+            color: var(--color-blanco);
+            padding: 2.5rem 1.5rem;
+            text-align: center;
+        }
+        .pagina-titulo h1 { font-size: clamp(1.5rem, 3.5vw, 2rem); margin-bottom: 0.5rem; }
+        .pagina-titulo p { font-size: 0.95rem; opacity: 0.9; }
+
+        .catalogo-wrap {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2.5rem 1.5rem;
+        }
+
+        .catalogo-toolbar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 2rem;
+        }
+        .catalogo-toolbar .total { color: var(--color-gris-claro); font-size: 0.95rem; }
+        .busqueda-wrap {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .busqueda-wrap input {
+            padding: 0.5rem 1rem;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            font-family: inherit;
+            font-size: 0.95rem;
+            min-width: 200px;
+        }
+        .busqueda-wrap input:focus {
+            outline: none;
+            border-color: var(--color-primario);
+            box-shadow: 0 0 0 2px rgba(196, 30, 58, 0.15);
+        }
+
+        .catalogo-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .repuesto-card {
+            background: var(--color-blanco);
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 14px rgba(0,0,0,0.06);
+            transition: transform 0.25s ease, box-shadow 0.25s ease;
+        }
+        .repuesto-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 28px rgba(0,0,0,0.1);
+        }
+        .repuesto-card.oculto { display: none; }
+
+        .repuesto-card .img-wrap {
+            aspect-ratio: 1;
+            background: var(--color-fondo);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+            cursor: pointer;
+        }
+        .repuesto-card .img-wrap img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+        .repuesto-card .info {
+            padding: 1rem;
+            border-top: 1px solid #edf2f7;
+        }
+        .repuesto-card .ref {
+            font-weight: 700;
+            color: var(--color-secundario);
+            font-size: 0.95rem;
+        }
+        .repuesto-card .desc {
+            font-size: 0.85rem;
+            color: var(--color-gris-claro);
+            margin-top: 0.25rem;
+        }
+
+        /* Lightbox */
+        .lightbox {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.9);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+        .lightbox.activo { display: flex; }
+        .lightbox .cerrar {
+            position: absolute;
+            top: 1rem;
+            right: 1.5rem;
+            background: transparent;
+            border: none;
+            color: #fff;
+            font-size: 2rem;
+            cursor: pointer;
+            line-height: 1;
+            padding: 0.25rem;
+        }
+        .lightbox .cerrar:hover { color: var(--color-primario); }
+        .lightbox .ref-lightbox {
+            position: absolute;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #fff;
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+        .lightbox img {
+            max-width: 90%;
+            max-height: 85vh;
+            object-fit: contain;
+        }
+
+        footer {
+            background: var(--color-secundario);
+            color: var(--color-blanco);
+            padding: 2rem 1.5rem;
+            text-align: center;
+            margin-top: 3rem;
+        }
+        .footer-inner { max-width: 1200px; margin: 0 auto; }
+        footer p { opacity: 0.9; font-size: 0.95rem; }
+        footer a { color: var(--color-blanco); text-decoration: none; }
+        footer a:hover { text-decoration: underline; }
+
+        @media (max-width: 600px) {
+            .logo { height: 72px; }
+            .catalogo-grid { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 1rem; }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-inner">
+            <a href="index.html" class="logo-wrap">
+                <img src="MELISSA%20FOTOS%20SODIMCO/LOGOS/LOGO%20SODIMCO%20PNG.png" alt="SODIMCO LTDA." class="logo">
+            </a>
+            <nav>
+                <ul>
+                    <li><a href="index.html">Inicio</a></li>
+                    <li><a href="index.html#nosotros">Nosotros</a></li>
+                    <li><a href="repuestos.html" class="activo">Catálogo repuestos</a></li>
+                    <li><a href="productos.html">Catálogo productos</a></li>
+                    <li><a href="index.html#contacto">Contacto</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <div class="pagina-titulo">
+        <h1>Catálogo de repuestos</h1>
+        <p>Repuestos genuinos para equipos industriales, transporte pesado y sistemas hidráulicos. Consulte disponibilidad y cotización.</p>
+    </div>
+
+    <div class="catalogo-wrap">
+        <div class="catalogo-toolbar">
+            <span class="total" id="total-items">0 repuestos</span>
+            <div class="busqueda-wrap">
+                <label for="busqueda" style="font-size:0.9rem;color:var(--color-gris-claro);">Buscar por referencia:</label>
+                <input type="text" id="busqueda" placeholder="Ej: 04, 15, 42..." autocomplete="off">
+            </div>
+        </div>
+        <div class="catalogo-grid" id="catalogo-grid"></div>
+    </div>
+
+    <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Ampliar imagen">
+        <button type="button" class="cerrar" id="lightbox-cerrar" aria-label="Cerrar">&times;</button>
+        <img src="" alt="" id="lightbox-img">
+        <span class="ref-lightbox" id="lightbox-ref"></span>
+    </div>
+
+    <footer>
+        <div class="footer-inner">
+            <p><strong>SODIMCO LTDA.</strong> Industria Metalmecánica</p>
+            <p>El Alto - La Paz: Av. Juan Pablo II, #3569</p>
+            <p>Teléfono: 591-71240200 / 591-2-2845879 · <a href="mailto:sodimco@sodimco.com.bo">sodimco@sodimco.com.bo</a></p>
+        </div>
+    </footer>
+
+    <script>
+        (function() {
+            var BASE = 'MELISSA FOTOS SODIMCO/REPUESTOS PNG/';
+            var NOMBRE_ARCHIVO = 'Diseño sin título';
+
+            var refs = [4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76,77,78,79,80,81,82,83,84,85,86,87];
+
+            function urlImagen(num) {
+                var nombre = NOMBRE_ARCHIVO + ' (' + num + ').png';
+                var folderEnc = 'MELISSA%20FOTOS%20SODIMCO/REPUESTOS%20PNG/';
+                return folderEnc + encodeURIComponent(nombre);
+            }
+
+            function refFormato(num) {
+                return 'Ref. ' + (num < 10 ? '0' + num : '' + num);
+            }
+
+            var grid = document.getElementById('catalogo-grid');
+            var totalEl = document.getElementById('total-items');
+            var busqueda = document.getElementById('busqueda');
+            var lightbox = document.getElementById('lightbox');
+            var lightboxImg = document.getElementById('lightbox-img');
+            var lightboxRef = document.getElementById('lightbox-ref');
+            var lightboxCerrar = document.getElementById('lightbox-cerrar');
+
+            function render() {
+                grid.innerHTML = '';
+                var filtro = (busqueda.value || '').trim().toLowerCase();
+                var visibles = 0;
+                refs.forEach(function(num) {
+                    var refStr = refFormato(num);
+                    var coincide = !filtro || (num + '').indexOf(filtro) !== -1 || refStr.toLowerCase().indexOf(filtro) !== -1;
+                    var card = document.createElement('div');
+                    card.className = 'repuesto-card' + (coincide ? '' : ' oculto');
+                    if (coincide) visibles++;
+                    card.innerHTML =
+                        '<div class="img-wrap" data-ref="' + num + '" data-src="' + urlImagen(num) + '">' +
+                        '<img src="' + urlImagen(num) + '" alt="Repuesto ' + refStr + '" loading="lazy">' +
+                        '</div>' +
+                        '<div class="info">' +
+                        '<div class="ref">' + refStr + '</div>' +
+                        '<div class="desc">Repuesto industria y transporte pesado</div>' +
+                        '</div>';
+                    grid.appendChild(card);
+                });
+                totalEl.textContent = visibles + ' repuesto' + (visibles !== 1 ? 's' : '');
+            }
+
+            grid.addEventListener('click', function(e) {
+                var wrap = e.target.closest('.img-wrap');
+                if (!wrap) return;
+                var src = wrap.getAttribute('data-src');
+                var ref = wrap.getAttribute('data-ref');
+                lightboxImg.src = src;
+                lightboxImg.alt = 'Repuesto ' + refFormato(parseInt(ref, 10));
+                lightboxRef.textContent = refFormato(parseInt(ref, 10));
+                lightbox.classList.add('activo');
+                document.body.style.overflow = 'hidden';
+            });
+
+            function cerrarLightbox() {
+                lightbox.classList.remove('activo');
+                document.body.style.overflow = '';
+            }
+            lightboxCerrar.addEventListener('click', cerrarLightbox);
+            lightbox.addEventListener('click', function(e) {
+                if (e.target === lightbox) cerrarLightbox();
+            });
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape') cerrarLightbox();
+            });
+
+            busqueda.addEventListener('input', function() { requestAnimationFrame(render); });
+            busqueda.addEventListener('keyup', function() { requestAnimationFrame(render); });
+
+            render();
+        })();
+    </script>
+</body>
+</html>

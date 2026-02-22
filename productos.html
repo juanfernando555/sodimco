@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Catálogo de productos | SODIMCO LTDA.</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --color-primario: #c41e3a;
+            --color-secundario: #1a365d;
+            --color-gris: #2d3748;
+            --color-gris-claro: #718096;
+            --color-fondo: #f7fafc;
+            --color-blanco: #ffffff;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; color: var(--color-gris); line-height: 1.6; overflow-x: hidden; }
+        html { scroll-behavior: smooth; }
+
+        header {
+            background: var(--color-blanco);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        .header-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1rem 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        .logo-wrap { display: block; text-decoration: none; }
+        .logo { height: 88px; width: auto; max-height: 20vw; object-fit: contain; }
+        nav ul { list-style: none; display: flex; gap: 1.5rem; flex-wrap: wrap; }
+        nav a { text-decoration: none; color: var(--color-gris); font-weight: 600; transition: color 0.2s; }
+        nav a:hover { color: var(--color-primario); }
+        nav a.activo { color: var(--color-primario); }
+
+        .pagina-titulo {
+            background: linear-gradient(135deg, var(--color-secundario) 0%, var(--color-gris) 100%);
+            color: var(--color-blanco);
+            padding: 2.5rem 1.5rem;
+            text-align: center;
+        }
+        .pagina-titulo h1 { font-size: clamp(1.5rem, 3.5vw, 2rem); margin-bottom: 0.5rem; }
+        .pagina-titulo p { font-size: 0.95rem; opacity: 0.9; }
+
+        .catalogo-wrap { max-width: 1200px; margin: 0 auto; padding: 2.5rem 1.5rem; }
+        .catalogo-toolbar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 2rem;
+        }
+        .catalogo-toolbar .total { color: var(--color-gris-claro); font-size: 0.95rem; }
+        .busqueda-wrap { display: flex; align-items: center; gap: 0.5rem; }
+        .busqueda-wrap input {
+            padding: 0.5rem 1rem;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            font-family: inherit;
+            font-size: 0.95rem;
+            min-width: 220px;
+        }
+        .busqueda-wrap input:focus {
+            outline: none;
+            border-color: var(--color-primario);
+            box-shadow: 0 0 0 2px rgba(196, 30, 58, 0.15);
+        }
+
+        .catalogo-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 1.5rem;
+        }
+        .producto-card {
+            background: var(--color-blanco);
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 14px rgba(0,0,0,0.06);
+            transition: transform 0.25s ease, box-shadow 0.25s ease;
+        }
+        .producto-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 28px rgba(0,0,0,0.1);
+        }
+        .producto-card.oculto { display: none; }
+        .producto-card .img-wrap {
+            aspect-ratio: 1;
+            background: var(--color-fondo);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+            cursor: pointer;
+        }
+        .producto-card .img-wrap img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+        .producto-card .info { padding: 1rem; border-top: 1px solid #edf2f7; }
+        .producto-card .nombre { font-weight: 700; color: var(--color-secundario); font-size: 0.95rem; line-height: 1.3; }
+        .producto-card .ref { font-size: 0.8rem; color: var(--color-gris-claro); margin-top: 0.35rem; }
+
+        .lightbox {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.9);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+        .lightbox.activo { display: flex; }
+        .lightbox .cerrar {
+            position: absolute;
+            top: 1rem;
+            right: 1.5rem;
+            background: transparent;
+            border: none;
+            color: #fff;
+            font-size: 2rem;
+            cursor: pointer;
+            line-height: 1;
+            padding: 0.25rem;
+        }
+        .lightbox .cerrar:hover { color: var(--color-primario); }
+        .lightbox .caption {
+            position: absolute;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #fff;
+            text-align: center;
+            font-size: 0.95rem;
+        }
+        .lightbox .caption .ref { opacity: 0.85; font-size: 0.85rem; }
+        .lightbox img { max-width: 90%; max-height: 85vh; object-fit: contain; }
+
+        footer {
+            background: var(--color-secundario);
+            color: var(--color-blanco);
+            padding: 2rem 1.5rem;
+            text-align: center;
+            margin-top: 3rem;
+        }
+        .footer-inner { max-width: 1200px; margin: 0 auto; }
+        footer p { opacity: 0.9; font-size: 0.95rem; }
+        footer a { color: var(--color-blanco); text-decoration: none; }
+        footer a:hover { text-decoration: underline; }
+
+        @media (max-width: 600px) {
+            .logo { height: 72px; }
+            .catalogo-grid { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 1rem; }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-inner">
+            <a href="index.html" class="logo-wrap">
+                <img src="MELISSA%20FOTOS%20SODIMCO/LOGOS/LOGO%20SODIMCO%20PNG.png" alt="SODIMCO LTDA." class="logo">
+            </a>
+            <nav>
+                <ul>
+                    <li><a href="index.html">Inicio</a></li>
+                    <li><a href="index.html#nosotros">Nosotros</a></li>
+                    <li><a href="repuestos.html">Catálogo repuestos</a></li>
+                    <li><a href="productos.html" class="activo">Catálogo productos</a></li>
+                    <li><a href="index.html#contacto">Contacto</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <div class="pagina-titulo">
+        <h1>Catálogo de productos</h1>
+        <p>Equipos y componentes para transporte pesado: cisternas, bombas hidráulicas, mandos, sistemas de ejes, semirremolques y más. Fabricación e industria metalmecánica.</p>
+    </div>
+
+    <div class="catalogo-wrap">
+        <div class="catalogo-toolbar">
+            <span class="total" id="total-items">0 productos</span>
+            <div class="busqueda-wrap">
+                <label for="busqueda" style="font-size:0.9rem;color:var(--color-gris-claro);">Buscar:</label>
+                <input type="text" id="busqueda" placeholder="Nombre o referencia (ej: cisterna, PROD-CIS)..." autocomplete="off">
+            </div>
+        </div>
+        <div class="catalogo-grid" id="catalogo-grid"></div>
+    </div>
+
+    <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Ampliar imagen">
+        <button type="button" class="cerrar" id="lightbox-cerrar" aria-label="Cerrar">&times;</button>
+        <img src="" alt="" id="lightbox-img">
+        <div class="caption">
+            <span id="lightbox-nombre"></span>
+            <span class="ref" id="lightbox-ref"></span>
+        </div>
+    </div>
+
+    <footer>
+        <div class="footer-inner">
+            <p><strong>SODIMCO LTDA.</strong> Industria Metalmecánica</p>
+            <p>El Alto - La Paz: Av. Juan Pablo II, #3569</p>
+            <p>Teléfono: 591-71240200 / 591-2-2845879 · <a href="mailto:sodimco@sodimco.com.bo">sodimco@sodimco.com.bo</a></p>
+        </div>
+    </footer>
+
+    <script>
+        (function() {
+            var BASE = 'MELISSA%20FOTOS%20SODIMCO/SODIMCO%20MKT/productos%20png/';
+            var productos = [
+                { file: 'abrazaderas-0.jpg', name: 'Abrazaderas', ref: 'PROD-ABR' },
+                { file: 'acomple de manguerra-0.jpg', name: 'Acople de manguera', ref: 'PROD-ACM' },
+                { file: 'Aro disco sueco-0.jpg', name: 'Aro disco sueco', ref: 'PROD-ADS' },
+                { file: 'balancines-0.jpg', name: 'Balancines', ref: 'PROD-BAL' },
+                { file: 'balancines_1-0.jpg', name: 'Balancines (vista 2)', ref: 'PROD-BAL2' },
+                { file: 'bomba bent de 65 cc-0.jpg', name: 'Bomba BENT 65 cc', ref: 'PROD-BEN' },
+                { file: 'bomba hidraulica 9 pistones-0.jpg', name: 'Bomba hidráulica 9 pistones', ref: 'PROD-BH9' },
+                { file: 'bomba hidraulica a engranje loca-0.jpg', name: 'Bomba hidráulica a engranajes', ref: 'PROD-BHE' },
+                { file: 'bomba hidraulica a enngranajes-0.jpg', name: 'Bomba hidráulica a engranajes', ref: 'PROD-BHEN' },
+                { file: 'bomba hidraulica loca azul-0.jpg', name: 'Bomba hidráulica loca azul', ref: 'PROD-BHL' },
+                { file: 'bomba hidraulicca de 6 pistones-0.jpg', name: 'Bomba hidráulica 6 pistones', ref: 'PROD-BH6' },
+                { file: 'bomba hyva2-0.jpg', name: 'Bomba HYVA', ref: 'PROD-BHY' },
+                { file: 'botellon hidraulico hiva-0.jpg', name: 'Botellón hidráulico HYVA', ref: 'PROD-BTH' },
+                { file: 'botellon hidraulico-0.jpg', name: 'Botellón hidráulico', ref: 'PROD-BOT' },
+                { file: 'cacchimba de 4p-0.jpg', name: 'Cachimba 4"', ref: 'PROD-C4' },
+                { file: 'cachimba  3 pulgadas-0.jpg', name: 'Cachimba 3"', ref: 'PROD-C3' },
+                { file: 'chumaceros-0.jpg', name: 'Chumaceras', ref: 'PROD-CHU' },
+                { file: 'cistena-0.jpg', name: 'Cisterna', ref: 'PROD-CIS' },
+                { file: 'cistenacara.jpg', name: 'Cisterna (cara)', ref: 'PROD-CISC' },
+                { file: 'cisterna  con dispensador-0.jpg', name: 'Cisterna con dispensador', ref: 'PROD-CID' },
+                { file: 'cisterna blanca sodimco-0.jpg', name: 'Cisterna blanca SODIMCO', ref: 'PROD-CIB' },
+                { file: 'cisterna verde-0.jpg', name: 'Cisterna verde', ref: 'PROD-CIV' },
+                { file: 'contratapa-0.jpg', name: 'Contratapa', ref: 'PROD-CON' },
+                { file: 'dispensador-0.jpg', name: 'Dispensador', ref: 'PROD-DIS' },
+                { file: 'ejes 2-0.jpg', name: 'Ejes', ref: 'PROD-EJ2' },
+                { file: 'ejes2-0.jpg', name: 'Sistema de ejes', ref: 'PROD-EJE' },
+                { file: 'erquipo hyva-0.jpg', name: 'Equipo HYVA', ref: 'PROD-EHY' },
+                { file: 'furgon-0.jpg', name: 'Furgón', ref: 'PROD-FUR' },
+                { file: 'mando de cabina 2 hyva-0.jpg', name: 'Mando de cabina HYVA', ref: 'PROD-MCH' },
+                { file: 'mando de cabina hiva-0.jpg', name: 'Mando de cabina HYVA (vista 2)', ref: 'PROD-MCH2' },
+                { file: 'mando de cabina-0.jpg', name: 'Mando de cabina', ref: 'PROD-MDC' },
+                { file: 'mando de palanca 3 way jostick-0.jpg', name: 'Mando de palanca 3 vías (joystick)', ref: 'PROD-MP3' },
+                { file: 'mando delimitador dawn-0.jpg', name: 'Mando delimitador DAWN', ref: 'PROD-MDD' },
+                { file: 'mando turco swiht gemma-0.jpg', name: 'Mando turco SWITH GEMMA', ref: 'PROD-MTS' },
+                { file: 'muelle-0.jpg', name: 'Muelle', ref: 'PROD-MUE' },
+                { file: 'pivote-0.jpg', name: 'Pivote', ref: 'PROD-PIV' },
+                { file: 'pivote_1-0.jpg', name: 'Pivote (vista 2)', ref: 'PROD-PIV2' },
+                { file: 'portallantas cuadrada-0.jpg', name: 'Portallantas cuadrada', ref: 'PROD-PC' },
+                { file: 'portallantas LARGA-0.jpg', name: 'Portallantas larga', ref: 'PROD-PL' },
+                { file: 'porvolqueta-0.jpg', name: 'Volqueta', ref: 'PROD-VOL' },
+                { file: 'pulmon bloquedor-0.jpg', name: 'Pulmón bloqueador', ref: 'PROD-PUB' },
+                { file: 'pulmon bloquedor_1-0.jpg', name: 'Pulmón bloqueador (vista 2)', ref: 'PROD-PUB2' },
+                { file: 'pulmon sencillo-0.jpg', name: 'Pulmón sencillo', ref: 'PROD-PUS' },
+                { file: 'pulmon sencillo_1-0.jpg', name: 'Pulmón sencillo (vista 2)', ref: 'PROD-PUS2' },
+                { file: 'recuperador de gas inferior-0.jpg', name: 'Recuperador de gas inferior', ref: 'PROD-RGI' },
+                { file: 'recuperador de gas inferior_1-0.jpg', name: 'Recuperador de gas inferior (vista 2)', ref: 'PROD-RGI2' },
+                { file: 'recuperador de gas superior grande-0.jpg', name: 'Recuperador de gas superior grande', ref: 'PROD-RGSG' },
+                { file: 'recuperador de gas superior pequeño-0.jpg', name: 'Recuperador de gas superior pequeño', ref: 'PROD-RGSP' },
+                { file: 'semirremolque-0.jpg', name: 'Semirremolque', ref: 'PROD-SEM' },
+                { file: 'sensor de sobrellanado-0.jpg', name: 'Sensor de sobrellenado', ref: 'PROD-SSO' },
+                { file: 'sensor de sobrellanado_1-0.jpg', name: 'Sensor de sobrellenado (vista 2)', ref: 'PROD-SSO2' },
+                { file: 'sistema de suspencion de aire2-0.jpg', name: 'Sistema de suspensión de aire', ref: 'PROD-SSA' },
+                { file: 'sitema de suspencio+ejes-0.jpg', name: 'Sistema de suspensión y ejes', ref: 'PROD-SSE' },
+                { file: 'toma fuerza fuller kuy_1-0.jpg', name: 'Toma de fuerza Fuller', ref: 'PROD-TFF' },
+                { file: 'toma fuerza R 7 -0.jpg', name: 'Toma de fuerza R7', ref: 'PROD-TFR7' },
+                { file: 'toma fuerza R6-0.jpg', name: 'Toma de fuerza R6', ref: 'PROD-TFR6' },
+                { file: 'toma fuerza R7 va con el primero es otra perpectiva-0.jpg', name: 'Toma de fuerza R7 (perspectiva)', ref: 'PROD-TFR7B' },
+                { file: 'toma fuerza sr 1700-0.jpg', name: 'Toma de fuerza SR 1700', ref: 'PROD-TFSR' },
+                { file: 'valvula a.p.i-0.jpg', name: 'Válvula API', ref: 'PROD-VAP' },
+                { file: 'valvula a.p.i_1-0.jpg', name: 'Válvula API (vista 2)', ref: 'PROD-VAP2' },
+                { file: 'valvula central de aire 4 salidas-0.jpg', name: 'Válvula central de aire 4 salidas', ref: 'PROD-VC4' },
+                { file: 'Shacman_heavy_dump_truck-0.jpg', name: 'Camión volqueta pesado Shacman', ref: 'PROD-SHA' }
+            ];
+
+            function urlImagen(file) {
+                return BASE + encodeURIComponent(file);
+            }
+
+            var grid = document.getElementById('catalogo-grid');
+            var totalEl = document.getElementById('total-items');
+            var busqueda = document.getElementById('busqueda');
+            var lightbox = document.getElementById('lightbox');
+            var lightboxImg = document.getElementById('lightbox-img');
+            var lightboxNombre = document.getElementById('lightbox-nombre');
+            var lightboxRef = document.getElementById('lightbox-ref');
+            var lightboxCerrar = document.getElementById('lightbox-cerrar');
+
+            function normalizar(s) { return (s || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, ''); }
+
+            function render() {
+                grid.innerHTML = '';
+                var filtro = normalizar(busqueda.value.trim());
+                var visibles = 0;
+                productos.forEach(function(p) {
+                    var coincide = !filtro ||
+                        normalizar(p.name).indexOf(filtro) !== -1 ||
+                        normalizar(p.ref).indexOf(filtro) !== -1 ||
+                        normalizar(p.file).indexOf(filtro) !== -1;
+                    var card = document.createElement('div');
+                    card.className = 'producto-card' + (coincide ? '' : ' oculto');
+                    if (coincide) visibles++;
+                    var src = urlImagen(p.file);
+                    card.innerHTML =
+                        '<div class="img-wrap" data-src="' + src.replace(/"/g, '&quot;') + '" data-name="' + p.name.replace(/"/g, '&quot;') + '" data-ref="' + p.ref + '">' +
+                        '<img src="' + src + '" alt="' + p.name.replace(/"/g, '&quot;') + '" loading="lazy" onerror="this.style.display=\'none\';this.nextElementSibling&&(this.nextElementSibling.style.display=\'block\');">' +
+                        '<span style="display:none;font-size:0.85rem;color:#718096;">Sin vista previa</span>' +
+                        '</div>' +
+                        '<div class="info">' +
+                        '<div class="nombre">' + p.name + '</div>' +
+                        '<div class="ref">' + p.ref + '</div>' +
+                        '</div>';
+                    grid.appendChild(card);
+                });
+                totalEl.textContent = visibles + ' producto' + (visibles !== 1 ? 's' : '');
+            }
+
+            grid.addEventListener('click', function(e) {
+                var wrap = e.target.closest('.img-wrap');
+                if (!wrap) return;
+                lightboxImg.src = wrap.getAttribute('data-src');
+                lightboxImg.alt = wrap.getAttribute('data-name');
+                lightboxNombre.textContent = wrap.getAttribute('data-name');
+                lightboxRef.textContent = wrap.getAttribute('data-ref');
+                lightbox.classList.add('activo');
+                document.body.style.overflow = 'hidden';
+            });
+
+            function cerrarLightbox() {
+                lightbox.classList.remove('activo');
+                document.body.style.overflow = '';
+            }
+            lightboxCerrar.addEventListener('click', cerrarLightbox);
+            lightbox.addEventListener('click', function(e) { if (e.target === lightbox) cerrarLightbox(); });
+            document.addEventListener('keydown', function(e) { if (e.key === 'Escape') cerrarLightbox(); });
+
+            busqueda.addEventListener('input', function() { requestAnimationFrame(render); });
+
+            render();
+        })();
+    </script>
+</body>
+</html>

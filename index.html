@@ -89,18 +89,23 @@
             color: var(--color-primario);
         }
 
-        /* Banner / Hero */
+        /* Banner / Hero - imagen contenida para evitar pixelado */
         .banner {
             position: relative;
-            min-height: 55vh;
-            min-height: 520px;
-            background: linear-gradient(135deg, var(--color-secundario) 0%, var(--color-gris) 100%);
+            min-height: 380px;
+            max-height: 42vh;
+            background-color: var(--color-secundario);
+            background-image: url('Portada/Portada.png');
+            background-repeat: no-repeat;
+            background-position: center center;
+            background-size: contain;
             display: flex;
             align-items: center;
             justify-content: center;
             color: var(--color-blanco);
             text-align: center;
             padding: 3rem 1.5rem;
+            overflow: hidden;
         }
 
         .banner-content {
@@ -113,13 +118,13 @@
             font-size: clamp(1.5rem, 3.5vw, 2.25rem);
             margin-bottom: 0.5rem;
             font-weight: 700;
-            text-shadow: 0 2px 12px rgba(0,0,0,0.3);
+            text-shadow: 0 2px 16px rgba(0,0,0,0.5), 0 0 1px rgba(0,0,0,0.8);
         }
 
         .banner p {
             font-size: 1rem;
-            opacity: 0.95;
-            text-shadow: 0 1px 8px rgba(0,0,0,0.25);
+            opacity: 0.98;
+            text-shadow: 0 1px 10px rgba(0,0,0,0.5), 0 0 1px rgba(0,0,0,0.6);
         }
 
         /* Secciones */
@@ -326,11 +331,6 @@
             to { opacity: 1; }
         }
 
-        @keyframes bannerImageZoom {
-            0% { transform: scale(1.05); }
-            100% { transform: scale(1.15); }
-        }
-
         html {
             scroll-behavior: smooth;
         }
@@ -386,25 +386,10 @@
             width: 100%;
         }
 
-        .banner {
-            min-height: 520px;
-            overflow: hidden;
-        }
-
-        .banner-bg {
-            position: absolute;
-            inset: 0;
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            opacity: 0.85;
-            animation: bannerImageZoom 18s ease-in-out infinite alternate;
-        }
-
         .banner-overlay {
             position: absolute;
             inset: 0;
-            background: linear-gradient(135deg, rgba(26,54,93,0.45) 0%, rgba(45,55,72,0.5) 100%);
+            background: linear-gradient(135deg, rgba(26,54,93,0.55) 0%, rgba(45,55,72,0.6) 100%);
             z-index: 1;
         }
 
@@ -469,7 +454,8 @@
             }
 
             .banner {
-                min-height: 420px;
+                min-height: 320px;
+                max-height: 40vh;
             }
 
             .logo {
@@ -498,7 +484,6 @@
 
     <main>
         <section id="inicio" class="banner">
-            <img src="MELISSA%20FOTOS%20SODIMCO/perfil%20+%20portada/Portada.png" alt="" class="banner-bg" aria-hidden="true">
             <div class="banner-overlay"></div>
             <div class="banner-content">
                 <h1>SODIMCO LTDA. Industria Metalmecánica</h1>

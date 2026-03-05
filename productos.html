@@ -37,8 +37,14 @@
             flex-wrap: wrap;
             gap: 1rem;
         }
-        .logo-wrap { display: block; text-decoration: none; }
-        .logo { height: 88px; width: auto; max-height: 20vw; object-fit: contain; }
+        .logo-wrap { display: block; text-decoration: none; flex-shrink: 0; }
+        .logo {
+            height: 88px;
+            width: auto;
+            max-height: 20vw;
+            object-fit: contain;
+            display: block;
+        }
         nav ul { list-style: none; display: flex; gap: 1.5rem; flex-wrap: wrap; }
         nav a { text-decoration: none; color: var(--color-gris); font-weight: 600; transition: color 0.2s; }
         nav a:hover { color: var(--color-primario); }
@@ -171,7 +177,7 @@
     <header>
         <div class="header-inner">
             <a href="index.html" class="logo-wrap">
-                <img src="MELISSA%20FOTOS%20SODIMCO/LOGOS/LOGO%20SODIMCO%20PNG.png" alt="SODIMCO LTDA." class="logo">
+                <img src="logo/Logo.png" alt="SODIMCO LTDA." class="logo">
             </a>
             <nav>
                 <ul>
@@ -220,7 +226,7 @@
 
     <script>
         (function() {
-            var BASE = 'MELISSA%20FOTOS%20SODIMCO/SODIMCO%20MKT/productos%20png/';
+            var BASE = 'productos/';
             var productos = [
                 { file: 'abrazaderas-0.jpg', name: 'Abrazaderas', ref: 'PROD-ABR' },
                 { file: 'acomple de manguerra-0.jpg', name: 'Acople de manguera', ref: 'PROD-ACM' },
